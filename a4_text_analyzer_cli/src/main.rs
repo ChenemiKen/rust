@@ -12,15 +12,13 @@ fn main() {
     let poem = fs::read_to_string("poem.txt")
         .expect("should have read the file");
 
-    // println!("With text: \n{poem}");
-
-    println!("Word count: {}", countWords(&poem));
-    println!("Line count: {}", countLines(&poem));
+    println!("Word count: {}", count_words(&poem));
+    println!("Line count: {}", count_lines(&poem));
     println!("Character count: {}", (poem.len()));
-    println!("Most Frequent word: {}", mostFrequentWord(&poem));
+    println!("Most Frequent word: {}", most_frequent_word(&poem));
 }
 
-fn countWords(s: &str) -> u32{
+fn count_words(s: &str) -> u32{
     let bytes = s.trim().as_bytes();
     let mut count = 0;
     for &item in bytes.iter(){
@@ -32,7 +30,7 @@ fn countWords(s: &str) -> u32{
     count
 }
 
-fn countLines(s: &str) -> u32{
+fn count_lines(s: &str) -> u32{
     let bytes = s.trim().as_bytes();
     let mut count = 0;
     for &item in bytes.iter(){
@@ -44,18 +42,20 @@ fn countLines(s: &str) -> u32{
     count
 }
 
-fn mostFrequentWord(s: &str) -> &str{
-    let words = s.split(' ');
+fn most_frequent_word(s: &str) -> &str{
+    let words = s.split_whitespace();
     let mut map = HashMap::new();
-    for &word in words {
+    for word in words {
         *map.entry(word).or_insert(0) += 1
     }
+
+    println!("{:?}", map);
 
     let mut max = 0;
     let mut word = "";
     for (key, val) in map.iter() {
-        if val > max {
-            max = val;
+        if *val > max {
+            max = *val;
             word = key;
         }
     }
